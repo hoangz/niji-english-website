@@ -9,7 +9,10 @@ const path       = require('path');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
-const DB_PATH    = path.join(__dirname, 'data', 'niji.db');
+// Vercel: dùng /tmp (writable), local: dùng data/
+const DB_PATH    = process.env.VERCEL
+  ? '/tmp/niji.db'
+  : path.join(__dirname, 'data', 'niji.db');
 const SUB_JSON   = path.join(__dirname, 'data', 'subscribers.json');
 const ADMIN_PWD  = process.env.ADMIN_PASSWORD || 'niji2026';
 const JWT_SECRET = process.env.JWT_SECRET     || 'niji-secret-change-me';
