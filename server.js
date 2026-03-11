@@ -65,6 +65,15 @@ db.exec(`
     email         TEXT PRIMARY KEY,
     subscribed_at TEXT NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS contacts (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    name       TEXT NOT NULL,
+    email      TEXT NOT NULL,
+    phone      TEXT,
+    goal       TEXT,
+    message    TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  );
 `);
 
 // Seed default content (INSERT OR IGNORE — won't overwrite existing)
@@ -155,6 +164,10 @@ app.post('/api/newsletter', (req, res) => {
 });
 
 // ─── API: Contact form ────────────────────────────────────────────────────────
+const insertContact = db.prepare(
+  'INSERT INTO contacts (name, email, phone, goal, message, created_at) VALUES (?, ?, ?, ?, ?, ?)'
+);
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, goal, message } = req.body || {};
   if (!name || !email || !message)
@@ -162,8 +175,11 @@ app.post('/api/contact', async (req, res) => {
   if (!isValidEmail(email))
     return res.status(400).json({ success: false, error: 'Email không hợp lệ.' });
   try {
+    // Lưu vào DB trước
+    insertContact.run(name, email, phone || null, goal || null, message, new Date().toISOString());
+    // Gửi email nếu đã cấu hình SMTP
     if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-      await transporter.sendMail({
+      transporter.sendMail({
         from: `"Niji English" <${process.env.SMTP_USER}>`,
         to:   process.env.CONTACT_RECEIVER || process.env.SMTP_USER,
         subject: `[Niji English] Liên hệ mới từ ${name}`,
@@ -173,15 +189,19 @@ app.post('/api/contact', async (req, res) => {
           <tr><td><b>SĐT:</b></td><td>${phone||'—'}</td></tr>
           <tr><td><b>Mục tiêu:</b></td><td>${goal||'—'}</td></tr>
           <tr><td><b>Tin nhắn:</b></td><td>${message}</td></tr></table>`,
-      });
-    } else {
-      console.log('[Contact]', { name, email, phone, goal, message });
+      }).catch(err => console.error('Mail error:', err.message));
     }
     res.json({ success: true, message: 'Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất.' });
   } catch (err) {
-    console.error('Mail error:', err.message);
+    console.error('Contact error:', err.message);
     res.status(500).json({ success: false, error: 'Gửi thất bại. Vui lòng thử lại sau.' });
   }
+});
+
+// ─── API: Contacts list (admin) ───────────────────────────────────────────────
+app.get('/api/admin/contacts', requireAdmin, (req, res) => {
+  const rows = db.prepare('SELECT * FROM contacts ORDER BY created_at DESC').all();
+  res.json({ success: true, total: rows.length, data: rows });
 });
 
 // ─── Admin panel ──────────────────────────────────────────────────────────────
