@@ -8,8 +8,7 @@ const path       = require('path');
 
 const app        = express();
 const PORT       = process.env.PORT || 3000;
-const ADMIN_PWD  = process.env.ADMIN_PASSWORD || 'niji2026';
-const JWT_SECRET = process.env.JWT_SECRET     || 'niji-secret-change-me';
+const JWT_SECRET = process.env.JWT_SECRET || 'niji-secret-change-me';
 
 // Vercel: dùng /tmp (writable), local: dùng data/
 const DATA_DIR = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
@@ -18,6 +17,13 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const CONTENT_FILE     = path.join(DATA_DIR, 'content.json');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
 const CONTACTS_FILE    = path.join(DATA_DIR, 'contacts.json');
+const CONFIG_FILE      = path.join(DATA_DIR, 'config.json');
+
+// ─── Config (password) ────────────────────────────────────────────────────────
+function readConfig() {
+  return readJSON(CONFIG_FILE, { adminPassword: process.env.ADMIN_PASSWORD || 'niji2026' });
+}
+function getAdminPassword() { return readConfig().adminPassword; }
 
 // ─── Default content ──────────────────────────────────────────────────────────
 const DEFAULT_CONTENT = {
@@ -129,10 +135,39 @@ app.put('/api/content', requireAdmin, (req, res) => {
 // ─── API: Admin auth ──────────────────────────────────────────────────────────
 app.post('/api/admin/login', (req, res) => {
   const { password } = req.body || {};
-  if (!password)              return res.status(400).json({ success: false, error: 'Vui lòng nhập mật khẩu.' });
-  if (password !== ADMIN_PWD) return res.status(401).json({ success: false, error: 'Mật khẩu không đúng.' });
+  if (!password)                        return res.status(400).json({ success: false, error: 'Vui lòng nhập mật khẩu.' });
+  if (password !== getAdminPassword())  return res.status(401).json({ success: false, error: 'Mật khẩu không đúng.' });
   const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
   res.json({ success: true, token });
+});
+
+// ─── API: Change password ─────────────────────────────────────────────────────
+app.post('/api/admin/change-password', requireAdmin, (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!currentPassword || !newPassword)
+    return res.status(400).json({ success: false, error: 'Vui lòng nhập đầy đủ thông tin.' });
+  if (newPassword.length < 6)
+    return res.status(400).json({ success: false, error: 'Mật khẩu mới phải có ít nhất 6 ký tự.' });
+  if (currentPassword !== getAdminPassword())
+    return res.status(401).json({ success: false, error: 'Mật khẩu hiện tại không đúng.' });
+  const cfg = readConfig();
+  writeJSON(CONFIG_FILE, { ...cfg, adminPassword: newPassword });
+  res.json({ success: true, message: 'Đổi mật khẩu thành công!' });
+});
+
+// ─── API: Upload image (base64, lưu vào content) ─────────────────────────────
+app.post('/api/admin/upload-image', requireAdmin, (req, res) => {
+  const { key, data } = req.body || {};
+  if (!key || !data)
+    return res.status(400).json({ success: false, error: 'Thiếu key hoặc data.' });
+  if (!data.startsWith('data:image/'))
+    return res.status(400).json({ success: false, error: 'Dữ liệu không phải ảnh.' });
+  // Giới hạn 2MB (base64 ~2.7MB raw)
+  if (data.length > 2_800_000)
+    return res.status(413).json({ success: false, error: 'Ảnh quá lớn. Vui lòng chọn ảnh dưới 2MB.' });
+  const current = readJSON(CONTENT_FILE, DEFAULT_CONTENT);
+  writeJSON(CONTENT_FILE, { ...current, [key]: data });
+  res.json({ success: true, message: 'Tải ảnh thành công!', key });
 });
 
 // ─── API: Subscribers ─────────────────────────────────────────────────────────

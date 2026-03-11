@@ -86,6 +86,7 @@
       <div class="sidebar-link" data-panel="partners"><i class="fa-solid fa-handshake w-4 text-center"></i> Đối tác</div>
       <div class="sidebar-link" data-panel="contacts"><i class="fa-solid fa-inbox w-4 text-center"></i> Liên hệ nhận</div>
       <div class="sidebar-link" data-panel="subscribers"><i class="fa-solid fa-envelope w-4 text-center"></i> Subscribers</div>
+      <div class="sidebar-link" data-panel="security"><i class="fa-solid fa-shield-halved w-4 text-center"></i> Bảo mật</div>
     </nav>
     <div class="p-3 border-t border-slate-100 space-y-2">
       <a href="/" target="_blank" class="sidebar-link text-slate-500"><i class="fa-solid fa-eye w-4 text-center"></i> Xem website</a>
@@ -112,6 +113,19 @@
           <label class="field-label">Mô tả ngắn</label>
           <textarea id="hero_subtext" class="field-input" rows="3"></textarea>
         </div>
+        <div>
+          <label class="field-label">Ảnh nền Hero</label>
+          <div class="flex items-start gap-4">
+            <img id="hero_image_preview" class="w-32 h-20 object-cover rounded-lg border border-slate-200 bg-slate-100" />
+            <div class="flex-1 space-y-2">
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fa-solid fa-upload"></i> Chọn ảnh
+                <input id="hero_image_input" type="file" accept="image/*" class="hidden" onchange="handleImageUpload('hero_image', this)" />
+              </label>
+              <p class="text-xs text-slate-400">JPG, PNG, WebP — tối đa 2MB</p>
+            </div>
+          </div>
+        </div>
         <button class="save-btn" data-save="hero"><i class="fa-solid fa-floppy-disk"></i> Lưu Hero</button>
       </div>
     </div>
@@ -127,6 +141,19 @@
         <div>
           <label class="field-label">Mô tả</label>
           <textarea id="about_desc" class="field-input" rows="5"></textarea>
+        </div>
+        <div>
+          <label class="field-label">Ảnh minh họa</label>
+          <div class="flex items-start gap-4">
+            <img id="about_image_preview" class="w-32 h-24 object-cover rounded-lg border border-slate-200 bg-slate-100" />
+            <div class="flex-1 space-y-2">
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fa-solid fa-upload"></i> Chọn ảnh
+                <input id="about_image_input" type="file" accept="image/*" class="hidden" onchange="handleImageUpload('about_image', this)" />
+              </label>
+              <p class="text-xs text-slate-400">JPG, PNG, WebP — tối đa 2MB</p>
+            </div>
+          </div>
         </div>
         <button class="save-btn" data-save="about"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
       </div>
@@ -208,6 +235,26 @@
     </div>
 
     <!-- ── SUBSCRIBERS ── -->
+    <!-- ── SECURITY ── -->
+    <div id="panel-security" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Bảo mật</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5 max-w-md">
+        <div>
+          <label class="field-label">Mật khẩu hiện tại</label>
+          <input id="pwd_current" type="password" class="field-input" placeholder="Nhập mật khẩu hiện tại..." />
+        </div>
+        <div>
+          <label class="field-label">Mật khẩu mới</label>
+          <input id="pwd_new" type="password" class="field-input" placeholder="Ít nhất 6 ký tự..." />
+        </div>
+        <div>
+          <label class="field-label">Xác nhận mật khẩu mới</label>
+          <input id="pwd_confirm" type="password" class="field-input" placeholder="Nhập lại mật khẩu mới..." />
+        </div>
+        <button id="change-pwd-btn" class="save-btn" onclick="changePassword()"><i class="fa-solid fa-key"></i> Đổi mật khẩu</button>
+      </div>
+    </div>
+
     <!-- ── CONTACTS ── -->
     <div id="panel-contacts" class="panel">
       <h2 class="text-2xl font-bold text-slate-900 mb-6">Liên hệ nhận được</h2>
@@ -308,9 +355,11 @@
     set('hero_badge',    c.hero_badge);
     set('hero_headline', c.hero_headline);
     set('hero_subtext',  c.hero_subtext);
+    if (c.hero_image) document.getElementById('hero_image_preview').src = c.hero_image;
     // About
     set('about_title', c.about_title);
     set('about_desc',  c.about_desc);
+    if (c.about_image) document.getElementById('about_image_preview').src = c.about_image;
     // Contact
     set('contact_phone',   c.contact_phone);
     set('contact_email',   c.contact_email);
@@ -539,6 +588,53 @@
           </table>
         </div>`;
     } catch { el.textContent = 'Không thể tải dữ liệu.'; }
+  }
+
+  // ── Image upload ──
+  function handleImageUpload(key, input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 2_000_000) { toast('Ảnh quá lớn. Vui lòng chọn ảnh dưới 2MB.', 'error'); input.value = ''; return; }
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const data = e.target.result;
+      // Show preview
+      const preview = document.getElementById(`${key}_preview`);
+      if (preview) preview.src = data;
+      // Upload to server
+      const r = await fetch(`${API}/api/admin/upload-image`, {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ key, data })
+      });
+      const j = await r.json();
+      if (j.success) toast('✓ Tải ảnh thành công!', 'success');
+      else toast(j.error || 'Lỗi tải ảnh.', 'error');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ── Change password ──
+  async function changePassword() {
+    const current = document.getElementById('pwd_current').value;
+    const newPwd   = document.getElementById('pwd_new').value;
+    const confirm  = document.getElementById('pwd_confirm').value;
+    if (!current || !newPwd || !confirm) { toast('Vui lòng điền đầy đủ các trường.', 'error'); return; }
+    if (newPwd !== confirm) { toast('Mật khẩu mới không khớp.', 'error'); return; }
+    const btn = document.getElementById('change-pwd-btn');
+    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
+    const r = await fetch(`${API}/api/admin/change-password`, {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ currentPassword: current, newPassword: newPwd })
+    });
+    const j = await r.json();
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-key"></i> Đổi mật khẩu';
+    if (j.success) {
+      toast('✓ Đổi mật khẩu thành công! Vui lòng đăng nhập lại.', 'success');
+      ['pwd_current','pwd_new','pwd_confirm'].forEach(id => document.getElementById(id).value = '');
+      setTimeout(() => document.getElementById('logout-btn').click(), 2500);
+    } else {
+      toast(j.error || 'Lỗi đổi mật khẩu.', 'error');
+    }
   }
 
   // ── Show dashboard ──
