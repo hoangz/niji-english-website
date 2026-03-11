@@ -97,7 +97,7 @@ if (!fs.existsSync(CONTACTS_FILE)) writeJSON(CONTACTS_FILE, []);
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 function requireAdmin(req, res, next) {
