@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Niji English – Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#066aab', accent: '#00764b', dark: '#0a1628' }, fontFamily: { sans: ['DM Sans','sans-serif'], display: ['Plus Jakarta Sans','sans-serif'] } } } };</script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1,h2,h3,h4,.logo { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; font-size:14px; font-weight:500; color:#64748b; transition:all .2s; cursor:pointer; }
+    .sidebar-link:hover, .sidebar-link.active { background:#eff6ff; color:#066aab; }
+    .sidebar-link.active { font-weight:600; }
+    .panel { display:none; }
+    .panel.active { display:block; }
+    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px); padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; color:#fff; z-index:9999; transition:transform .3s, opacity .3s; opacity:0; }
+    #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    #toast.success { background:#00764b; }
+    #toast.error   { background:#dc2626; }
+    .field-label { display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:6px; }
+    .field-input { width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; color:#1e293b; outline:none; transition:border .2s; background:#fff; font-family:'DM Sans',sans-serif; }
+    .field-input:focus { border-color:#066aab; box-shadow:0 0 0 3px rgba(6,106,171,.1); }
+    textarea.field-input { resize:vertical; min-height:80px; }
+    .save-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:#066aab; color:#fff; font-weight:700; font-size:14px; border:none; cursor:pointer; transition:opacity .2s,transform .2s; }
+    .save-btn:hover { opacity:.9; transform:scale(1.02); }
+    .save-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+    .card-editor { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; }
+    .add-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:8px; background:#f0fdf4; color:#00764b; font-weight:600; font-size:13px; border:1.5px dashed #00764b; cursor:pointer; transition:all .2s; }
+    .add-btn:hover { background:#dcfce7; }
+    .remove-btn { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:6px; background:#fff0f0; color:#dc2626; border:none; cursor:pointer; font-size:13px; transition:all .2s; flex-shrink:0; }
+    .remove-btn:hover { background:#fee2e2; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<!-- ── Login screen ── -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xl logo" style="background:#066aab">N</div>
+      <div>
+        <div class="font-bold text-slate-900 text-lg logo">Niji English</div>
+        <div class="text-slate-400 text-xs">Quản trị nội dung</div>
+      </div>
+    </div>
+    <h2 class="text-xl font-bold text-slate-900 mb-6">Đăng nhập Admin</h2>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label class="field-label">Mật khẩu</label>
+        <input id="login-pwd" type="password" class="field-input" placeholder="Nhập mật khẩu..." autofocus />
+      </div>
+      <button type="submit" class="save-btn w-full justify-center">
+        <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+      </button>
+    </form>
+    <p id="login-error" class="text-red-500 text-sm mt-3 hidden"></p>
+  </div>
+</div>
+
+<!-- ── Dashboard ── -->
+<div id="dashboard" class="hidden min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed top-0 left-0 bottom-0 z-40">
+    <div class="p-5 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black logo" style="background:#066aab">N</div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm logo">Niji English</div>
+          <div class="text-slate-400 text-xs">Admin Panel</div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+      <div class="sidebar-link active" data-panel="hero"><i class="fa-solid fa-image w-4 text-center"></i> Hero</div>
+      <div class="sidebar-link" data-panel="about"><i class="fa-solid fa-circle-info w-4 text-center"></i> Về chúng tôi</div>
+      <div class="sidebar-link" data-panel="stats"><i class="fa-solid fa-chart-bar w-4 text-center"></i> Số liệu</div>
+      <div class="sidebar-link" data-panel="services"><i class="fa-solid fa-graduation-cap w-4 text-center"></i> Khóa học</div>
+      <div class="sidebar-link" data-panel="features"><i class="fa-solid fa-check-circle w-4 text-center"></i> Lý do chọn</div>
+      <div class="sidebar-link" data-panel="testimonials"><i class="fa-solid fa-comments w-4 text-center"></i> Testimonials</div>
+      <div class="sidebar-link" data-panel="contact"><i class="fa-solid fa-phone w-4 text-center"></i> Liên hệ</div>
+      <div class="sidebar-link" data-panel="partners"><i class="fa-solid fa-handshake w-4 text-center"></i> Đối tác</div>
+      <div class="sidebar-link" data-panel="subscribers"><i class="fa-solid fa-envelope w-4 text-center"></i> Subscribers</div>
+    </nav>
+    <div class="p-3 border-t border-slate-100 space-y-2">
+      <a href="/" target="_blank" class="sidebar-link text-slate-500"><i class="fa-solid fa-eye w-4 text-center"></i> Xem website</a>
+      <div id="logout-btn" class="sidebar-link text-red-400 hover:!bg-red-50 hover:!text-red-600"><i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Đăng xuất</div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="ml-64 flex-1 p-8 max-w-4xl">
+
+    <!-- ── HERO ── -->
+    <div id="panel-hero" class="panel active">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Hero Section</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5">
+        <div>
+          <label class="field-label">Badge text</label>
+          <input id="hero_badge" type="text" class="field-input" />
+        </div>
+        <div>
+          <label class="field-label">Headline chính (dấu phẩy để xuống dòng highlight)</label>
+          <input id="hero_headline" type="text" class="field-input" />
+        </div>
+        <div>
+          <label class="field-label">Mô tả ngắn</label>
+          <textarea id="hero_subtext" class="field-input" rows="3"></textarea>
+        </div>
+        <button class="save-btn" data-save="hero"><i class="fa-solid fa-floppy-disk"></i> Lưu Hero</button>
+      </div>
+    </div>
+
+    <!-- ── ABOUT ── -->
+    <div id="panel-about" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Về chúng tôi</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5">
+        <div>
+          <label class="field-label">Tiêu đề</label>
+          <input id="about_title" type="text" class="field-input" />
+        </div>
+        <div>
+          <label class="field-label">Mô tả</label>
+          <textarea id="about_desc" class="field-input" rows="5"></textarea>
+        </div>
+        <button class="save-btn" data-save="about"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </div>
+    </div>
+
+    <!-- ── STATS ── -->
+    <div id="panel-stats" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Số liệu nổi bật</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="stats-editor" class="space-y-3 mb-5"></div>
+        <button class="save-btn" data-save="stats"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </div>
+    </div>
+
+    <!-- ── SERVICES ── -->
+    <div id="panel-services" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Khóa học</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="services-editor" class="space-y-4 mb-5"></div>
+        <div class="flex gap-3 flex-wrap">
+          <button class="add-btn" id="add-service"><i class="fa-solid fa-plus"></i> Thêm khóa học</button>
+          <button class="save-btn" data-save="services"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FEATURES ── -->
+    <div id="panel-features" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Lý do chọn Niji English</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="features-editor" class="space-y-4 mb-5"></div>
+        <div class="flex gap-3 flex-wrap">
+          <button class="add-btn" id="add-feature"><i class="fa-solid fa-plus"></i> Thêm tính năng</button>
+          <button class="save-btn" data-save="features"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TESTIMONIALS ── -->
+    <div id="panel-testimonials" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Testimonials</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="testimonials-editor" class="space-y-4 mb-5"></div>
+        <div class="flex gap-3 flex-wrap">
+          <button class="add-btn" id="add-testimonial"><i class="fa-solid fa-plus"></i> Thêm testimonial</button>
+          <button class="save-btn" data-save="testimonials"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONTACT ── -->
+    <div id="panel-contact" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Thông tin liên hệ</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5">
+        <div>
+          <label class="field-label">Hotline</label>
+          <input id="contact_phone" type="text" class="field-input" placeholder="+84 xxx xxx xxx" />
+        </div>
+        <div>
+          <label class="field-label">Email</label>
+          <input id="contact_email" type="email" class="field-input" />
+        </div>
+        <div>
+          <label class="field-label">Địa chỉ</label>
+          <input id="contact_address" type="text" class="field-input" />
+        </div>
+        <button class="save-btn" data-save="contact"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </div>
+    </div>
+
+    <!-- ── PARTNERS ── -->
+    <div id="panel-partners" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Đối tác</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <p class="text-slate-500 text-sm mb-4">Mỗi dòng một tên công ty.</p>
+        <textarea id="partners_text" class="field-input mb-5" rows="10" placeholder="Microsoft&#10;Google&#10;VNG Corporation"></textarea>
+        <button class="save-btn" data-save="partners"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </div>
+    </div>
+
+    <!-- ── SUBSCRIBERS ── -->
+    <div id="panel-subscribers" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Danh sách Subscribers</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="subscribers-list" class="text-slate-400 text-sm">Đang tải...</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const API = '';
+  let token  = localStorage.getItem('niji_admin_token') || '';
+  let content = {};
+
+  // ── Toast ──
+  function toast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `show ${type}`;
+    setTimeout(() => t.className = '', 3000);
+  }
+
+  // ── Auth ──
+  function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }; }
+
+  async function verifyToken() {
+    if (!token) return false;
+    try {
+      const r = await fetch(`${API}/api/content`);
+      // Also try a PUT with empty object to verify admin token
+      const r2 = await fetch(`${API}/api/content`, { method: 'PUT', headers: authHeaders(), body: '{}' });
+      return r2.ok;
+    } catch { return false; }
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pwd = document.getElementById('login-pwd').value;
+    const btn = e.target.querySelector('button');
+    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+    try {
+      const r = await fetch(`${API}/api/admin/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+      const j = await r.json();
+      if (j.success) {
+        token = j.token;
+        localStorage.setItem('niji_admin_token', token);
+        showDashboard();
+      } else {
+        document.getElementById('login-error').textContent = j.error;
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    } catch { toast('Không kết nối được server.', 'error'); }
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập';
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('niji_admin_token');
+    token = '';
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+  });
+
+  // ── Navigation ──
+  document.querySelectorAll('.sidebar-link[data-panel]').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      link.classList.add('active');
+      document.getElementById(`panel-${link.dataset.panel}`).classList.add('active');
+      if (link.dataset.panel === 'subscribers') loadSubscribers();
+    });
+  });
+
+  // ── Load content ──
+  async function loadContent() {
+    const r = await fetch(`${API}/api/content`);
+    content  = await r.json();
+    populateFields();
+  }
+
+  function populateFields() {
+    const c = content;
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+
+    // Hero
+    set('hero_badge',    c.hero_badge);
+    set('hero_headline', c.hero_headline);
+    set('hero_subtext',  c.hero_subtext);
+    // About
+    set('about_title', c.about_title);
+    set('about_desc',  c.about_desc);
+    // Contact
+    set('contact_phone',   c.contact_phone);
+    set('contact_email',   c.contact_email);
+    set('contact_address', c.contact_address);
+    // Partners (array → textarea)
+    if (c.partners) document.getElementById('partners_text').value = c.partners.join('\n');
+
+    // Stats
+    renderStatsEditor(c.stats || []);
+    renderServicesEditor(c.services || []);
+    renderFeaturesEditor(c.features || []);
+    renderTestimonialsEditor(c.testimonials || []);
+  }
+
+  // ── Stats editor ──
+  function renderStatsEditor(stats) {
+    const g = document.getElementById('stats-editor');
+    g.innerHTML = stats.map((s, i) => `
+      <div class="card-editor flex flex-wrap gap-3 items-end">
+        <div class="flex-1 min-w-24"><label class="field-label">Giá trị</label><input class="field-input stat-value" data-i="${i}" type="number" value="${s.value}" /></div>
+        <div class="w-28"><label class="field-label">Suffix</label><input class="field-input stat-suffix" data-i="${i}" type="text" value="${s.suffix}" /></div>
+        <div class="flex-1 min-w-24"><label class="field-label">Nhãn</label><input class="field-input stat-label" data-i="${i}" type="text" value="${s.label}" /></div>
+      </div>`).join('');
+  }
+
+  function collectStats() {
+    const items = [];
+    document.querySelectorAll('.stat-value').forEach((el, i) => {
+      items.push({ value: Number(el.value), suffix: document.querySelectorAll('.stat-suffix')[i].value, label: document.querySelectorAll('.stat-label')[i].value });
+    });
+    return items;
+  }
+
+  // ── Services editor ──
+  function renderServicesEditor(services) {
+    const g = document.getElementById('services-editor');
+    g.innerHTML = services.map((s, i) => `
+      <div class="card-editor space-y-3" data-i="${i}">
+        <div class="flex items-center justify-between"><span class="font-semibold text-slate-700 text-sm">Khóa học ${i+1}</span><button class="remove-btn" data-remove="service" data-i="${i}"><i class="fa-solid fa-trash"></i></button></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="field-label">Icon (fa class)</label><input class="field-input svc-icon" type="text" value="${s.icon}" placeholder="fa-comments" /></div>
+          <div class="flex items-end gap-2"><label class="field-label w-full">Nổi bật<br/><input type="checkbox" class="svc-featured mt-1" ${s.featured?'checked':''} /> Phổ biến nhất</label></div>
+        </div>
+        <div><label class="field-label">Tiêu đề</label><input class="field-input svc-title" type="text" value="${s.title}" /></div>
+        <div><label class="field-label">Mô tả</label><textarea class="field-input svc-desc" rows="2">${s.desc}</textarea></div>
+      </div>`).join('');
+    bindRemove('service', renderServicesEditor, collectServices);
+  }
+
+  function collectServices() {
+    return [...document.querySelectorAll('#services-editor .card-editor')].map(el => ({
+      icon:     el.querySelector('.svc-icon').value,
+      title:    el.querySelector('.svc-title').value,
+      desc:     el.querySelector('.svc-desc').value,
+      featured: el.querySelector('.svc-featured').checked,
+    }));
+  }
+
+  document.getElementById('add-service').addEventListener('click', () => {
+    const list = collectServices();
+    list.push({ icon: 'fa-star', title: 'Khóa học mới', desc: 'Mô tả khóa học...', featured: false });
+    renderServicesEditor(list);
+  });
+
+  // ── Features editor ──
+  function renderFeaturesEditor(features) {
+    const g = document.getElementById('features-editor');
+    g.innerHTML = features.map((f, i) => `
+      <div class="card-editor space-y-3" data-i="${i}">
+        <div class="flex items-center justify-between"><span class="font-semibold text-slate-700 text-sm">Tính năng ${i+1}</span><button class="remove-btn" data-remove="feature" data-i="${i}"><i class="fa-solid fa-trash"></i></button></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="field-label">Icon (fa class)</label><input class="field-input feat-icon" type="text" value="${f.icon}" /></div>
+          <div><label class="field-label">Màu (blue/green)</label><select class="field-input feat-color"><option value="blue" ${f.color==='blue'?'selected':''}>Blue</option><option value="green" ${f.color==='green'?'selected':''}>Green</option></select></div>
+        </div>
+        <div><label class="field-label">Tiêu đề</label><input class="field-input feat-title" type="text" value="${f.title}" /></div>
+        <div><label class="field-label">Mô tả</label><textarea class="field-input feat-desc" rows="2">${f.desc}</textarea></div>
+      </div>`).join('');
+    bindRemove('feature', renderFeaturesEditor, collectFeatures);
+  }
+
+  function collectFeatures() {
+    return [...document.querySelectorAll('#features-editor .card-editor')].map(el => ({
+      icon:  el.querySelector('.feat-icon').value,
+      color: el.querySelector('.feat-color').value,
+      title: el.querySelector('.feat-title').value,
+      desc:  el.querySelector('.feat-desc').value,
+    }));
+  }
+
+  document.getElementById('add-feature').addEventListener('click', () => {
+    const list = collectFeatures();
+    list.push({ icon: 'fa-star', color: 'blue', title: 'Tính năng mới', desc: 'Mô tả...' });
+    renderFeaturesEditor(list);
+  });
+
+  // ── Testimonials editor ──
+  function renderTestimonialsEditor(testimonials) {
+    const g = document.getElementById('testimonials-editor');
+    g.innerHTML = testimonials.map((t, i) => `
+      <div class="card-editor space-y-3" data-i="${i}">
+        <div class="flex items-center justify-between"><span class="font-semibold text-slate-700 text-sm">Testimonial ${i+1}</span><button class="remove-btn" data-remove="testimonial" data-i="${i}"><i class="fa-solid fa-trash"></i></button></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="field-label">Họ tên</label><input class="field-input testi-name" type="text" value="${t.name}" /></div>
+          <div><label class="field-label">Cấp độ đạt được</label><input class="field-input testi-level" type="text" value="${t.level}" placeholder="B2 đạt được" /></div>
+        </div>
+        <div><label class="field-label">Chức danh & Công ty</label><input class="field-input testi-title" type="text" value="${t.title}" /></div>
+        <div><label class="field-label">Nội dung quote</label><textarea class="field-input testi-quote" rows="3">${t.quote}</textarea></div>
+      </div>`).join('');
+    bindRemove('testimonial', renderTestimonialsEditor, collectTestimonials);
+  }
+
+  function collectTestimonials() {
+    return [...document.querySelectorAll('#testimonials-editor .card-editor')].map(el => ({
+      name:   el.querySelector('.testi-name').value,
+      title:  el.querySelector('.testi-title').value,
+      quote:  el.querySelector('.testi-quote').value,
+      level:  el.querySelector('.testi-level').value,
+      avatar: el.querySelector('.testi-name').value.replace(/\s+/g, '+'),
+    }));
+  }
+
+  document.getElementById('add-testimonial').addEventListener('click', () => {
+    const list = collectTestimonials();
+    list.push({ name: 'Học viên mới', title: 'Chức danh · Công ty', quote: 'Nội dung testimonial...', level: 'B2 đạt được', avatar: 'Hoc+Vien' });
+    renderTestimonialsEditor(list);
+  });
+
+  // ── Remove helper ──
+  function bindRemove(type, renderFn, collectFn) {
+    document.querySelectorAll(`[data-remove="${type}"]`).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const list = collectFn();
+        list.splice(+btn.dataset.i, 1);
+        renderFn(list);
+      });
+    });
+  }
+
+  // ── Save handlers ──
+  async function saveSection(section) {
+    let payload = {};
+
+    if (section === 'hero') {
+      payload = { hero_badge: document.getElementById('hero_badge').value, hero_headline: document.getElementById('hero_headline').value, hero_subtext: document.getElementById('hero_subtext').value };
+    } else if (section === 'about') {
+      payload = { about_title: document.getElementById('about_title').value, about_desc: document.getElementById('about_desc').value };
+    } else if (section === 'contact') {
+      payload = { contact_phone: document.getElementById('contact_phone').value, contact_email: document.getElementById('contact_email').value, contact_address: document.getElementById('contact_address').value };
+    } else if (section === 'stats') {
+      payload = { stats: collectStats() };
+    } else if (section === 'services') {
+      payload = { services: collectServices() };
+    } else if (section === 'features') {
+      payload = { features: collectFeatures() };
+    } else if (section === 'testimonials') {
+      payload = { testimonials: collectTestimonials() };
+    } else if (section === 'partners') {
+      payload = { partners: document.getElementById('partners_text').value.split('\n').map(s => s.trim()).filter(Boolean) };
+    }
+
+    const r = await fetch(`${API}/api/content`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(payload) });
+    const j = await r.json();
+    if (j.success) toast('✓ Đã lưu thành công!', 'success');
+    else if (r.status === 401) { toast('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.', 'error'); setTimeout(() => document.getElementById('logout-btn').click(), 2000); }
+    else toast(j.error || 'Lỗi khi lưu.', 'error');
+  }
+
+  document.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
+      await saveSection(btn.dataset.save);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu';
+    });
+  });
+
+  // ── Subscribers list ──
+  async function loadSubscribers() {
+    const el = document.getElementById('subscribers-list');
+    try {
+      const r = await fetch(`${API}/api/admin/subscribers`, { headers: authHeaders() });
+      const j = await r.json();
+      if (!j.success) { el.textContent = 'Lỗi tải dữ liệu.'; return; }
+      if (!j.data.length) { el.textContent = 'Chưa có subscriber nào.'; return; }
+      el.innerHTML = `
+        <div class="flex items-center justify-between mb-4">
+          <span class="font-semibold text-slate-700">Tổng: <strong>${j.total}</strong> người đăng ký</span>
+        </div>
+        <div class="overflow-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-slate-100"><th class="text-left py-2 px-3 text-slate-500 font-semibold">Email</th><th class="text-left py-2 px-3 text-slate-500 font-semibold">Ngày đăng ký</th></tr></thead>
+            <tbody>${j.data.map(s => `<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="py-2 px-3">${s.email}</td><td class="py-2 px-3 text-slate-400">${new Date(s.subscribed_at).toLocaleDateString('vi-VN')}</td></tr>`).join('')}</tbody>
+          </table>
+        </div>`;
+    } catch { el.textContent = 'Không thể tải dữ liệu.'; }
+  }
+
+  // ── Show dashboard ──
+  async function showDashboard() {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    await loadContent();
+  }
+
+  // ── Auto-login if token exists ──
+  (async () => {
+    if (token && await verifyToken()) showDashboard();
+  })();
+</script>
+</body>
+</html>

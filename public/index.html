@@ -199,14 +199,14 @@
 <section id="hero" class="hero-bg">
   <div class="hero-overlay flex flex-col items-center justify-center text-center px-4 py-32 pt-40">
     <div class="max-w-4xl mx-auto">
-      <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-6 text-white border border-white/30 bg-white/10">
+      <span id="hero-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-6 text-white border border-white/30 bg-white/10">
         Học 1 kèm 1 · Cá nhân hóa · Linh hoạt
       </span>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+      <h1 id="hero-headline" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
         Nói Nhiều Hơn,<br />
         <span style="color:#7dd3fc">Tiến Bộ Nhanh Hơn</span>
       </h1>
-      <p class="text-lg sm:text-xl text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed">
+      <p id="hero-subtext" class="text-lg sm:text-xl text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed">
         Niji English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò. Bạn sẽ nói tiếng Anh 70–80% thời gian mỗi buổi học.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -218,8 +218,8 @@
         </a>
       </div>
 
-      <!-- Stats -->
-      <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
+      <!-- Stats (rendered by loadContent) -->
+      <div id="stats-grid" class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20">
           <div class="stat-number text-4xl font-black text-white" data-target="1200" data-suffix="+">0</div>
           <div class="text-white/70 text-sm mt-1 font-medium">Học viên</div>
@@ -250,14 +250,11 @@
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div data-aos="fade-right">
         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 text-white" style="background:var(--accent)">Về Niji English</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-6 leading-tight section-title left-line">
+        <h2 id="about-title" class="text-3xl sm:text-4xl font-black text-slate-900 mb-6 leading-tight section-title left-line">
           Học tiếng Anh 1 kèm 1 –<br>Nói nhiều hơn, tiến bộ nhanh hơn
         </h2>
-        <p class="text-slate-600 text-lg leading-relaxed mb-6">
-          Niji English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò, nơi mỗi học viên có lộ trình học cá nhân hóa và được luyện nói tiếng Anh nhiều nhất trong mỗi buổi học.
-        </p>
-        <p class="text-slate-600 leading-relaxed mb-8">
-          Chúng tôi tin rằng cách tốt nhất để giỏi tiếng Anh là <strong class="text-slate-800">nói thật nhiều</strong>. Vì vậy, trong mỗi buổi học tại Niji English, học viên sẽ dành <strong class="text-slate-800">70–80% thời gian để nói tiếng Anh</strong>, giáo viên sẽ lắng nghe, sửa lỗi và giúp bạn cải thiện từng ngày.
+        <p id="about-desc" class="text-slate-600 text-lg leading-relaxed mb-6">
+          Niji English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò, nơi mỗi học viên có lộ trình học cá nhân hóa và được luyện nói tiếng Anh nhiều nhất trong mỗi buổi học. Chúng tôi tin rằng cách tốt nhất để giỏi tiếng Anh là nói thật nhiều.
         </p>
         <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white text-sm hover:scale-105 transition-all shadow-md" style="background:var(--primary)">
           Tìm hiểu thêm <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -290,47 +287,7 @@
       <h2 class="text-3xl sm:text-4xl font-black text-slate-900 section-title">Chúng tôi có gì?</h2>
       <p class="text-slate-500 mt-6 max-w-xl mx-auto">Lựa chọn khóa học phù hợp với mục tiêu và lịch trình của bạn.</p>
     </div>
-    <div class="grid md:grid-cols-3 gap-8">
-
-      <!-- Card 1 -->
-      <div class="service-card bg-white rounded-2xl p-8 border border-slate-100 shadow-sm" data-aos="fade-up" data-aos-delay="0">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white text-2xl mb-6" style="background:var(--primary)">
-          <i class="fa-solid fa-comments"></i>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Giao tiếp hằng ngày</h3>
-        <p class="text-slate-500 leading-relaxed mb-6">Luyện nói tiếng Anh tự nhiên trong các tình huống thực tế: mua sắm, du lịch, gặp gỡ bạn bè và công việc hằng ngày.</p>
-        <a href="#contact" class="inline-flex items-center gap-2 font-semibold text-sm hover:gap-3 transition-all" style="color:var(--primary)">
-          Tìm hiểu thêm <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
-      </div>
-
-      <!-- Card 2 – Featured -->
-      <div class="service-card bg-white rounded-2xl p-8 border-2 shadow-lg relative" style="border-color:var(--primary)" data-aos="fade-up" data-aos-delay="100">
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span class="px-4 py-1.5 rounded-full text-xs font-bold text-white uppercase tracking-wider" style="background:var(--accent)">Phổ biến nhất</span>
-        </div>
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white text-2xl mb-6" style="background:var(--primary)">
-          <i class="fa-solid fa-briefcase"></i>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Tiếng Anh công việc</h3>
-        <p class="text-slate-500 leading-relaxed mb-6">Tự tin họp hành, viết email, thuyết trình và giao tiếp với đồng nghiệp, khách hàng quốc tế. Phù hợp với người đi làm.</p>
-        <a href="#contact" class="inline-flex items-center gap-2 font-semibold text-sm hover:gap-3 transition-all" style="color:var(--primary)">
-          Tìm hiểu thêm <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="service-card bg-white rounded-2xl p-8 border border-slate-100 shadow-sm" data-aos="fade-up" data-aos-delay="200">
-        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white text-2xl mb-6" style="background:var(--primary)">
-          <i class="fa-solid fa-microphone-lines"></i>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Phỏng vấn & Thuyết trình</h3>
-        <p class="text-slate-500 leading-relaxed mb-6">Luyện trả lời phỏng vấn, thuyết trình chuyên nghiệp và diễn đạt ý tưởng rõ ràng, tự tin trước đám đông.</p>
-        <a href="#contact" class="inline-flex items-center gap-2 font-semibold text-sm hover:gap-3 transition-all" style="color:var(--primary)">
-          Tìm hiểu thêm <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
-      </div>
-    </div>
+    <div id="services-grid" class="grid md:grid-cols-3 gap-8"><!-- rendered by loadContent() --></div>
   </div>
 </section>
 
@@ -344,57 +301,7 @@
       <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 text-white" style="background:var(--accent)">Lý do chọn chúng tôi</span>
       <h2 class="text-3xl sm:text-4xl font-black text-slate-900 section-title">Vì sao chọn Niji English?</h2>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="0">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#eff6ff; color:var(--primary)">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Học 1 kèm 1 – Tập trung hoàn toàn vào bạn</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Không lớp đông, không chờ đợi. Giáo viên tập trung hoàn toàn vào mục tiêu và trình độ của bạn.</p>
-      </div>
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="80">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#f0fdf4; color:var(--accent)">
-          <i class="fa-solid fa-map-location-dot"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Lộ trình cá nhân hóa</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Mỗi học viên có một kế hoạch học riêng phù hợp: giao tiếp hằng ngày, tiếng Anh công việc, phỏng vấn, thuyết trình.</p>
-      </div>
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="160">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#eff6ff; color:var(--primary)">
-          <i class="fa-solid fa-comments"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Nói nhiều hơn trong mỗi buổi học</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Bạn là người nói nhiều nhất. Giáo viên đặt câu hỏi, sửa phát âm và hướng dẫn cách diễn đạt tự nhiên.</p>
-      </div>
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="0">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#f0fdf4; color:var(--accent)">
-          <i class="fa-solid fa-calendar-days"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Lịch học linh hoạt</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Bạn có thể đặt lịch học phù hợp với thời gian của mình, học ở bất cứ đâu chỉ cần có internet.</p>
-      </div>
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="80">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#eff6ff; color:var(--primary)">
-          <i class="fa-solid fa-spell-check"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Sửa lỗi ngay trong buổi học</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Lỗi phát âm, ngữ pháp, từ vựng được sửa ngay lập tức — giúp bạn không lặp lại sai lầm.</p>
-      </div>
-
-      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="160">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="background:#f0fdf4; color:var(--accent)">
-          <i class="fa-solid fa-bolt"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Luyện phản xạ giao tiếp</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Tập trả lời nhanh, tự nhiên. Xây dựng phản xạ tiếng Anh thực sự thay vì dịch từ tiếng Việt.</p>
-      </div>
-
-    </div>
+    <div id="features-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"><!-- rendered by loadContent() --></div>
   </div>
 </section>
 
@@ -502,82 +409,8 @@
     </div>
 
     <div class="relative" data-aos="fade-up" data-aos-delay="100">
-      <!-- Slides container -->
-      <div id="testimonials-container" class="relative min-h-64">
-
-        <div class="testimonial-slide active">
-          <div class="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-slate-100 text-center">
-            <i class="fa-solid fa-quote-left text-4xl mb-6" style="color:var(--primary); opacity:0.3"></i>
-            <p class="text-slate-700 text-lg leading-relaxed mb-8 italic">
-              "Trước đây em cứ nghĩ tiếng Anh của mình quá tệ để học lại. Nhưng sau 2 tháng học 1 kèm 1 tại Niji English, em đã có thể họp bằng tiếng Anh với khách hàng mà không run nữa."
-            </p>
-            <div class="flex items-center justify-center gap-4">
-              <img src="https://ui-avatars.com/api/?name=Nguyen+Thi+Lan&size=56&background=066aab&color=fff&bold=true" alt="Nguyễn Thị Lan" class="w-14 h-14 rounded-full" />
-              <div class="text-left">
-                <div class="font-bold text-slate-900">Nguyễn Thị Lan</div>
-                <div class="text-slate-500 text-sm">Marketing Manager · FPT Software</div>
-                <div class="flex items-center gap-1 mt-1">
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <span class="ml-2 text-xs px-2 py-0.5 rounded-full text-white font-semibold" style="background:var(--accent)">B2 đạt được</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-slide">
-          <div class="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-slate-100 text-center">
-            <i class="fa-solid fa-quote-left text-4xl mb-6" style="color:var(--primary); opacity:0.3"></i>
-            <p class="text-slate-700 text-lg leading-relaxed mb-8 italic">
-              "Mình từng sợ nói tiếng Anh dù học 10 năm. Sau 3 tháng với Niji English, mình đã phỏng vấn thành công vào công ty Hàn Quốc. Phương pháp Practice First thực sự hiệu quả!"
-            </p>
-            <div class="flex items-center justify-center gap-4">
-              <img src="https://ui-avatars.com/api/?name=Tran+Van+Hieu&size=56&background=00764b&color=fff&bold=true" alt="Trần Văn Hiếu" class="w-14 h-14 rounded-full" />
-              <div class="text-left">
-                <div class="font-bold text-slate-900">Trần Văn Hiếu</div>
-                <div class="text-slate-500 text-sm">Software Engineer · Startup Hàn Quốc</div>
-                <div class="flex items-center gap-1 mt-1">
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <span class="ml-2 text-xs px-2 py-0.5 rounded-full text-white font-semibold" style="background:var(--accent)">C1 đạt được</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-slide">
-          <div class="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-slate-100 text-center">
-            <i class="fa-solid fa-quote-left text-4xl mb-6" style="color:var(--primary); opacity:0.3"></i>
-            <p class="text-slate-700 text-lg leading-relaxed mb-8 italic">
-              "Mình làm sale B2B, cần tiếng Anh để gặp khách nước ngoài. Học tại Niji English được luyện đúng những gì mình cần, giáo viên sửa từng câu nói trong tình huống thực tế."
-            </p>
-            <div class="flex items-center justify-center gap-4">
-              <img src="https://ui-avatars.com/api/?name=Le+Thu+Huong&size=56&background=066aab&color=fff&bold=true" alt="Lê Thu Hương" class="w-14 h-14 rounded-full" />
-              <div class="text-left">
-                <div class="font-bold text-slate-900">Lê Thu Hương</div>
-                <div class="text-slate-500 text-sm">B2B Sales Manager · Lazada Vietnam</div>
-                <div class="flex items-center gap-1 mt-1">
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <i class="fa-solid fa-star text-amber-400 text-xs"></i>
-                  <span class="ml-2 text-xs px-2 py-0.5 rounded-full text-white font-semibold" style="background:var(--accent)">B1 → B2</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <!-- Slides rendered by loadContent() -->
+      <div id="testimonials-container" class="relative min-h-64"></div>
 
       <!-- Controls -->
       <div class="flex items-center justify-center gap-6 mt-8">
@@ -601,30 +434,7 @@
   <div class="max-w-7xl mx-auto px-4">
     <p class="text-center text-slate-400 text-sm font-semibold uppercase tracking-widest mb-8">Tin tưởng bởi các tổ chức hàng đầu</p>
     <div class="marquee-wrap">
-      <div class="marquee-track">
-        <!-- Set 1 -->
-        <div class="flex items-center gap-16 px-8">
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Microsoft</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Google</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">VNG Corporation</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Lazada</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Grab</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">FPT Software</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Masan Group</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Vingroup</span>
-        </div>
-        <!-- Set 2 (duplicate for seamless loop) -->
-        <div class="flex items-center gap-16 px-8">
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Microsoft</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Google</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">VNG Corporation</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Lazada</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Grab</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">FPT Software</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Masan Group</span>
-          <span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">Vingroup</span>
-        </div>
-      </div>
+      <div id="partners-track" class="marquee-track"><!-- rendered by loadContent() --></div>
     </div>
   </div>
 </section>
@@ -692,7 +502,7 @@
             </div>
             <div>
               <div class="text-xs text-slate-400 uppercase tracking-wide font-medium">Hotline</div>
-              <a href="tel:+84123456789" class="font-semibold text-slate-800 hover:text-primary transition-colors">+84 123 456 789</a>
+              <a id="contact-phone" href="tel:+84123456789" class="font-semibold text-slate-800 hover:text-primary transition-colors">+84 123 456 789</a>
             </div>
           </div>
           <div class="flex items-center gap-4">
@@ -701,7 +511,7 @@
             </div>
             <div>
               <div class="text-xs text-slate-400 uppercase tracking-wide font-medium">Email</div>
-              <a href="mailto:hello@niji.edu.vn" class="font-semibold text-slate-800 hover:text-primary transition-colors">hello@niji.edu.vn</a>
+              <a id="contact-email" href="mailto:hello@niji.edu.vn" class="font-semibold text-slate-800 hover:text-primary transition-colors">hello@niji.edu.vn</a>
             </div>
           </div>
           <div class="flex items-center gap-4">
@@ -710,7 +520,7 @@
             </div>
             <div>
               <div class="text-xs text-slate-400 uppercase tracking-wide font-medium">Địa chỉ</div>
-              <span class="font-semibold text-slate-800">TP. Hồ Chí Minh, Việt Nam</span>
+              <span id="contact-address" class="font-semibold text-slate-800">TP. Hồ Chí Minh, Việt Nam</span>
             </div>
           </div>
         </div>
@@ -1062,16 +872,135 @@
     });
   }
 
+  // ── Render helpers ──
+  function renderServices(services) {
+    const g = document.getElementById('services-grid');
+    if (!g || !services) return;
+    g.innerHTML = services.map((s, i) => `
+      <div class="service-card bg-white rounded-2xl p-8 ${s.featured ? 'border-2 shadow-lg relative' : 'border border-slate-100 shadow-sm'}" style="${s.featured ? 'border-color:var(--primary)' : ''}" data-aos="fade-up" data-aos-delay="${i*100}">
+        ${s.featured ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2"><span class="px-4 py-1.5 rounded-full text-xs font-bold text-white uppercase tracking-wider" style="background:var(--accent)">Phổ biến nhất</span></div>' : ''}
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white text-2xl mb-6" style="background:var(--primary)"><i class="fa-solid ${s.icon}"></i></div>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">${s.title}</h3>
+        <p class="text-slate-500 leading-relaxed mb-6">${s.desc}</p>
+        <a href="#contact" class="inline-flex items-center gap-2 font-semibold text-sm hover:gap-3 transition-all" style="color:var(--primary)">Tìm hiểu thêm <i class="fa-solid fa-arrow-right text-xs"></i></a>
+      </div>`).join('');
+  }
+
+  function renderFeatures(features) {
+    const g = document.getElementById('features-grid');
+    if (!g || !features) return;
+    g.innerHTML = features.map((f, i) => `
+      <div class="feature-card bg-white rounded-2xl p-7 border border-slate-100" data-aos="fade-up" data-aos-delay="${(i%3)*80}">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5" style="${f.color==='green' ? 'background:#f0fdf4;color:var(--accent)' : 'background:#eff6ff;color:var(--primary)'}">
+          <i class="fa-solid ${f.icon}"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">${f.title}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">${f.desc}</p>
+      </div>`).join('');
+  }
+
+  function renderTestimonials(testimonials) {
+    const c = document.getElementById('testimonials-container');
+    if (!c || !testimonials) return;
+    c.innerHTML = testimonials.map((t, i) => `
+      <div class="testimonial-slide ${i===0?'active':''}">
+        <div class="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-slate-100 text-center">
+          <i class="fa-solid fa-quote-left text-4xl mb-6" style="color:var(--primary);opacity:0.3"></i>
+          <p class="text-slate-700 text-lg leading-relaxed mb-8 italic">"${t.quote}"</p>
+          <div class="flex items-center justify-center gap-4">
+            <img src="https://ui-avatars.com/api/?name=${t.avatar}&size=56&background=066aab&color=fff&bold=true" alt="${t.name}" class="w-14 h-14 rounded-full" />
+            <div class="text-left">
+              <div class="font-bold text-slate-900">${t.name}</div>
+              <div class="text-slate-500 text-sm">${t.title}</div>
+              <div class="flex items-center gap-1 mt-1">
+                ${'<i class="fa-solid fa-star text-amber-400 text-xs"></i>'.repeat(5)}
+                <span class="ml-2 text-xs px-2 py-0.5 rounded-full text-white font-semibold" style="background:var(--accent)">${t.level}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderPartners(partners) {
+    const t = document.getElementById('partners-track');
+    if (!t || !partners) return;
+    const items = partners.map(p => `<span class="text-2xl font-black text-slate-300 hover:text-slate-500 transition-colors cursor-default whitespace-nowrap">${p}</span>`).join('');
+    const row = `<div class="flex items-center gap-16 px-8">${items}</div>`;
+    t.innerHTML = row + row; // duplicate for seamless loop
+  }
+
+  function renderStats(stats) {
+    const g = document.getElementById('stats-grid');
+    if (!g || !stats) return;
+    g.innerHTML = stats.map(s => `
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20">
+        <div class="stat-number text-4xl font-black text-white" data-target="${s.value}" data-suffix="${s.suffix}">0</div>
+        <div class="text-white/70 text-sm mt-1 font-medium">${s.label}</div>
+      </div>`).join('');
+  }
+
+  // ── Load content from API ──
+  async function loadContent() {
+    try {
+      const res = await fetch('/api/content');
+      if (!res.ok) return;
+      const c = await res.json();
+
+      // Simple text fields
+      const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+      setText('hero-badge',      c.hero_badge);
+      setText('hero-subtext',    c.hero_subtext);
+      setText('about-title',     c.about_title);
+      setText('about-desc',      c.about_desc);
+      setText('contact-address', c.contact_address);
+
+      // Hero headline (preserve span highlight)
+      if (c.hero_headline) {
+        const el = document.getElementById('hero-headline');
+        if (el) {
+          const parts = c.hero_headline.split(',');
+          el.innerHTML = parts.length > 1
+            ? `${parts[0]},<br/><span style="color:#7dd3fc">${parts.slice(1).join(',').trim()}</span>`
+            : c.hero_headline;
+        }
+      }
+
+      // Contact links
+      if (c.contact_phone) {
+        const el = document.getElementById('contact-phone');
+        if (el) { el.textContent = c.contact_phone; el.href = `tel:${c.contact_phone.replace(/\s/g,'')}` ; }
+      }
+      if (c.contact_email) {
+        const el = document.getElementById('contact-email');
+        if (el) { el.textContent = c.contact_email; el.href = `mailto:${c.contact_email}`; }
+      }
+
+      // Array-rendered sections
+      renderStats(c.stats);
+      renderServices(c.services);
+      renderFeatures(c.features);
+      renderTestimonials(c.testimonials);
+      renderPartners(c.partners);
+
+      // Re-init AOS and carousel after dynamic render
+      if (window.AOS) AOS.refresh();
+      initCarousel();
+      initCounters();
+    } catch (e) {
+      console.warn('Content API unavailable, using static fallback.');
+    }
+  }
+
   // ── Boot ──
   document.addEventListener('DOMContentLoaded', () => {
     initNavScroll();
     initHamburger();
-    initCounters();
-    initCarousel();
     initBackToTop();
     initSmoothScroll();
     initContactForm();
     initNewsletterForm();
+    loadContent(); // fetch dynamic content (also calls initCarousel + initCounters)
   });
 </script>
 
