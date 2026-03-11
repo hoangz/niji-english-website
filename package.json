@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "vercel-build": "npm rebuild better-sqlite3 --build-from-source"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
