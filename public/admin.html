@@ -84,6 +84,7 @@
       <div class="sidebar-link" data-panel="testimonials"><i class="fa-solid fa-comments w-4 text-center"></i> Testimonials</div>
       <div class="sidebar-link" data-panel="contact"><i class="fa-solid fa-phone w-4 text-center"></i> Liên hệ</div>
       <div class="sidebar-link" data-panel="partners"><i class="fa-solid fa-handshake w-4 text-center"></i> Đối tác</div>
+      <div class="sidebar-link" data-panel="contacts"><i class="fa-solid fa-inbox w-4 text-center"></i> Liên hệ nhận</div>
       <div class="sidebar-link" data-panel="subscribers"><i class="fa-solid fa-envelope w-4 text-center"></i> Subscribers</div>
     </nav>
     <div class="p-3 border-t border-slate-100 space-y-2">
@@ -207,6 +208,14 @@
     </div>
 
     <!-- ── SUBSCRIBERS ── -->
+    <!-- ── CONTACTS ── -->
+    <div id="panel-contacts" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Liên hệ nhận được</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="contacts-list" class="text-slate-400 text-sm">Đang tải...</div>
+      </div>
+    </div>
+
     <div id="panel-subscribers" class="panel">
       <h2 class="text-2xl font-bold text-slate-900 mb-6">Danh sách Subscribers</h2>
       <div class="bg-white rounded-2xl p-6 shadow-sm">
@@ -280,6 +289,7 @@
       link.classList.add('active');
       document.getElementById(`panel-${link.dataset.panel}`).classList.add('active');
       if (link.dataset.panel === 'subscribers') loadSubscribers();
+      if (link.dataset.panel === 'contacts') loadContacts();
     });
   });
 
@@ -477,6 +487,38 @@
       btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu';
     });
   });
+
+  // ── Contacts list ──
+  async function loadContacts() {
+    const el = document.getElementById('contacts-list');
+    try {
+      const r = await fetch(`${API}/api/admin/contacts`, { headers: authHeaders() });
+      const j = await r.json();
+      if (!j.success) { el.textContent = 'Lỗi tải dữ liệu.'; return; }
+      if (!j.data.length) { el.innerHTML = '<p class="text-slate-400">Chưa có liên hệ nào.</p>'; return; }
+      el.innerHTML = `
+        <div class="flex items-center justify-between mb-4">
+          <span class="font-semibold text-slate-700">Tổng: <strong>${j.total}</strong> liên hệ</span>
+        </div>
+        <div class="space-y-4">
+          ${j.data.map(c => `
+            <div class="border border-slate-100 rounded-xl p-4 hover:bg-slate-50">
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <div>
+                  <span class="font-semibold text-slate-800">${c.name}</span>
+                  <span class="text-slate-400 text-xs ml-2">${new Date(c.created_at).toLocaleString('vi-VN')}</span>
+                </div>
+                <div class="text-xs text-right text-slate-500 shrink-0">
+                  <div>${c.email}</div>
+                  ${c.phone ? `<div>${c.phone}</div>` : ''}
+                </div>
+              </div>
+              ${c.goal ? `<div class="text-xs text-blue-600 mb-1">🎯 ${c.goal}</div>` : ''}
+              <p class="text-sm text-slate-600 leading-relaxed">${c.message}</p>
+            </div>`).join('')}
+        </div>`;
+    } catch { el.textContent = 'Không thể tải dữ liệu.'; }
+  }
 
   // ── Subscribers list ──
   async function loadSubscribers() {
