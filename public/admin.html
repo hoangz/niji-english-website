@@ -393,6 +393,33 @@
     return items;
   }
 
+  // ── Inline image helpers (shared for services & testimonials) ──
+  function handleInlineImageChange(input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { toast('Ảnh quá lớn (tối đa 2MB)', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      const card = input.closest('.card-editor');
+      const preview = card.querySelector('.img-preview');
+      const hidden = card.querySelector('.img-base64');
+      if (preview) { preview.src = e.target.result; preview.classList.remove('hidden'); }
+      if (hidden) hidden.value = e.target.result;
+      const clearBtn = card.querySelector('.img-clear-btn');
+      if (clearBtn) clearBtn.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearInlineImage(btn) {
+    const card = btn.closest('.card-editor');
+    const preview = card.querySelector('.img-preview');
+    const hidden = card.querySelector('.img-base64');
+    if (preview) { preview.src = ''; preview.classList.add('hidden'); }
+    if (hidden) hidden.value = '';
+    btn.classList.add('hidden');
+  }
+
   // ── Services editor ──
   function renderServicesEditor(services) {
     const g = document.getElementById('services-editor');
@@ -405,6 +432,20 @@
         </div>
         <div><label class="field-label">Tiêu đề</label><input class="field-input svc-title" type="text" value="${s.title}" /></div>
         <div><label class="field-label">Mô tả</label><textarea class="field-input svc-desc" rows="2">${s.desc}</textarea></div>
+        <div>
+          <label class="field-label">Ảnh minh họa (tuỳ chọn)</label>
+          <div class="flex items-center gap-3 mt-1">
+            <img class="img-preview w-20 h-14 object-cover rounded-lg border border-slate-200 ${s.image ? '' : 'hidden'}" src="${s.image || ''}" />
+            <div class="flex flex-col gap-1">
+              <label class="cursor-pointer inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors font-medium">
+                <i class="fa-solid fa-image"></i> Chọn ảnh
+                <input type="file" accept="image/*" class="hidden" onchange="handleInlineImageChange(this)" />
+              </label>
+              <button type="button" class="img-clear-btn text-xs text-red-400 hover:text-red-600 text-left ${s.image ? '' : 'hidden'}" onclick="clearInlineImage(this)">Xóa ảnh</button>
+            </div>
+          </div>
+          <input type="hidden" class="img-base64 svc-image" value="${s.image || ''}" />
+        </div>
       </div>`).join('');
     bindRemove('service', renderServicesEditor, collectServices);
   }
@@ -415,12 +456,13 @@
       title:    el.querySelector('.svc-title').value,
       desc:     el.querySelector('.svc-desc').value,
       featured: el.querySelector('.svc-featured').checked,
+      image:    el.querySelector('.svc-image').value || '',
     }));
   }
 
   document.getElementById('add-service').addEventListener('click', () => {
     const list = collectServices();
-    list.push({ icon: 'fa-star', title: 'Khóa học mới', desc: 'Mô tả khóa học...', featured: false });
+    list.push({ icon: 'fa-star', title: 'Khóa học mới', desc: 'Mô tả khóa học...', featured: false, image: '' });
     renderServicesEditor(list);
   });
 
@@ -467,23 +509,38 @@
         </div>
         <div><label class="field-label">Chức danh & Công ty</label><input class="field-input testi-title" type="text" value="${t.title}" /></div>
         <div><label class="field-label">Nội dung quote</label><textarea class="field-input testi-quote" rows="3">${t.quote}</textarea></div>
+        <div>
+          <label class="field-label">Avatar học viên (tuỳ chọn)</label>
+          <div class="flex items-center gap-3 mt-1">
+            <img class="img-preview w-14 h-14 object-cover rounded-full border-2 border-slate-200 ${t.avatarImg ? '' : 'hidden'}" src="${t.avatarImg || ''}" />
+            <div class="flex flex-col gap-1">
+              <label class="cursor-pointer inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors font-medium">
+                <i class="fa-solid fa-user-circle"></i> Chọn ảnh
+                <input type="file" accept="image/*" class="hidden" onchange="handleInlineImageChange(this)" />
+              </label>
+              <button type="button" class="img-clear-btn text-xs text-red-400 hover:text-red-600 text-left ${t.avatarImg ? '' : 'hidden'}" onclick="clearInlineImage(this)">Xóa</button>
+            </div>
+          </div>
+          <input type="hidden" class="img-base64 testi-avatarImg" value="${t.avatarImg || ''}" />
+        </div>
       </div>`).join('');
     bindRemove('testimonial', renderTestimonialsEditor, collectTestimonials);
   }
 
   function collectTestimonials() {
     return [...document.querySelectorAll('#testimonials-editor .card-editor')].map(el => ({
-      name:   el.querySelector('.testi-name').value,
-      title:  el.querySelector('.testi-title').value,
-      quote:  el.querySelector('.testi-quote').value,
-      level:  el.querySelector('.testi-level').value,
-      avatar: el.querySelector('.testi-name').value.replace(/\s+/g, '+'),
+      name:      el.querySelector('.testi-name').value,
+      title:     el.querySelector('.testi-title').value,
+      quote:     el.querySelector('.testi-quote').value,
+      level:     el.querySelector('.testi-level').value,
+      avatar:    el.querySelector('.testi-name').value.replace(/\s+/g, '+'),
+      avatarImg: el.querySelector('.testi-avatarImg').value || '',
     }));
   }
 
   document.getElementById('add-testimonial').addEventListener('click', () => {
     const list = collectTestimonials();
-    list.push({ name: 'Học viên mới', title: 'Chức danh · Công ty', quote: 'Nội dung testimonial...', level: 'B2 đạt được', avatar: 'Hoc+Vien' });
+    list.push({ name: 'Học viên mới', title: 'Chức danh · Công ty', quote: 'Nội dung testimonial...', level: 'B2 đạt được', avatar: 'Hoc+Vien', avatarImg: '' });
     renderTestimonialsEditor(list);
   });
 
