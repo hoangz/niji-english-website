@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Niji English – Admin</title>
+  <title>TEC English – Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -41,9 +41,9 @@
 <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
     <div class="flex items-center gap-3 mb-8">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xl logo" style="background:#066aab">N</div>
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xl logo" style="background:#066aab">T</div>
       <div>
-        <div class="font-bold text-slate-900 text-lg logo">Niji English</div>
+        <div class="font-bold text-slate-900 text-lg logo">TEC English</div>
         <div class="text-slate-400 text-xs">Quản trị nội dung</div>
       </div>
     </div>
@@ -68,9 +68,9 @@
   <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed top-0 left-0 bottom-0 z-40">
     <div class="p-5 border-b border-slate-100">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black logo" style="background:#066aab">N</div>
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black logo" style="background:#066aab">T</div>
         <div>
-          <div class="font-bold text-slate-900 text-sm logo">Niji English</div>
+          <div class="font-bold text-slate-900 text-sm logo">TEC English</div>
           <div class="text-slate-400 text-xs">Admin Panel</div>
         </div>
       </div>
@@ -82,6 +82,7 @@
       <div class="sidebar-link" data-panel="services"><i class="fa-solid fa-graduation-cap w-4 text-center"></i> Khóa học</div>
       <div class="sidebar-link" data-panel="features"><i class="fa-solid fa-check-circle w-4 text-center"></i> Lý do chọn</div>
       <div class="sidebar-link" data-panel="testimonials"><i class="fa-solid fa-comments w-4 text-center"></i> Testimonials</div>
+      <div class="sidebar-link" data-panel="gallery"><i class="fa-solid fa-images w-4 text-center"></i> Hoạt động</div>
       <div class="sidebar-link" data-panel="contact"><i class="fa-solid fa-phone w-4 text-center"></i> Liên hệ</div>
       <div class="sidebar-link" data-panel="partners"><i class="fa-solid fa-handshake w-4 text-center"></i> Đối tác</div>
       <div class="sidebar-link" data-panel="contacts"><i class="fa-solid fa-inbox w-4 text-center"></i> Liên hệ nhận</div>
@@ -182,7 +183,7 @@
 
     <!-- ── FEATURES ── -->
     <div id="panel-features" class="panel">
-      <h2 class="text-2xl font-bold text-slate-900 mb-6">Lý do chọn Niji English</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Lý do chọn TEC English</h2>
       <div class="bg-white rounded-2xl p-6 shadow-sm">
         <div id="features-editor" class="space-y-4 mb-5"></div>
         <div class="flex gap-3 flex-wrap">
@@ -200,6 +201,18 @@
         <div class="flex gap-3 flex-wrap">
           <button class="add-btn" id="add-testimonial"><i class="fa-solid fa-plus"></i> Thêm testimonial</button>
           <button class="save-btn" data-save="testimonials"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GALLERY ── -->
+    <div id="panel-gallery" class="panel">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Hoạt động</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div id="gallery-editor" class="space-y-4 mb-5"></div>
+        <div class="flex gap-3 flex-wrap">
+          <button class="add-btn" id="add-gallery-item"><i class="fa-solid fa-plus"></i> Thêm ảnh</button>
+          <button class="save-btn" data-save="gallery"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
         </div>
       </div>
     </div>
@@ -277,7 +290,7 @@
 
 <script>
   const API = '';
-  let token  = localStorage.getItem('niji_admin_token') || '';
+  let token  = localStorage.getItem('tec_admin_token') || '';
   let content = {};
 
   // ── Toast ──
@@ -311,7 +324,7 @@
       const j = await r.json();
       if (j.success) {
         token = j.token;
-        localStorage.setItem('niji_admin_token', token);
+        localStorage.setItem('tec_admin_token', token);
         showDashboard();
       } else {
         document.getElementById('login-error').textContent = j.error;
@@ -322,7 +335,7 @@
   });
 
   document.getElementById('logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('niji_admin_token');
+    localStorage.removeItem('tec_admin_token');
     token = '';
     document.getElementById('dashboard').classList.add('hidden');
     document.getElementById('login-screen').classList.remove('hidden');
@@ -372,6 +385,7 @@
     renderServicesEditor(c.services || []);
     renderFeaturesEditor(c.features || []);
     renderTestimonialsEditor(c.testimonials || []);
+    renderGalleryEditor(c.gallery || []);
   }
 
   // ── Stats editor ──
@@ -544,6 +558,48 @@
     renderTestimonialsEditor(list);
   });
 
+  // ── Gallery editor ──
+  function renderGalleryEditor(gallery) {
+    const g = document.getElementById('gallery-editor');
+    g.innerHTML = gallery.map((item, i) => `
+      <div class="card-editor space-y-3" data-i="${i}">
+        <div class="flex items-center justify-between"><span class="font-semibold text-slate-700 text-sm">Ảnh ${i+1}</span><button class="remove-btn" data-remove="gallery-item" data-i="${i}"><i class="fa-solid fa-trash"></i></button></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="field-label">Caption</label><input class="field-input gallery-caption" type="text" value="${item.caption || ''}" placeholder="Buổi học 1 kèm 1 online" /></div>
+          <div><label class="field-label">Alt text</label><input class="field-input gallery-alt" type="text" value="${item.alt || ''}" placeholder="Mô tả ảnh" /></div>
+        </div>
+        <div>
+          <label class="field-label">Ảnh</label>
+          <div class="flex items-center gap-3 mt-1">
+            <img class="img-preview w-44 h-28 object-cover rounded-lg border border-slate-200 ${item.src ? '' : 'hidden'}" src="${item.src || ''}" />
+            <div class="flex flex-col gap-1">
+              <label class="cursor-pointer inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors font-medium">
+                <i class="fa-solid fa-image"></i> Chọn ảnh
+                <input type="file" accept="image/*" class="hidden" onchange="handleInlineImageChange(this)" />
+              </label>
+              <button type="button" class="img-clear-btn text-xs text-red-400 hover:text-red-600 text-left ${item.src ? '' : 'hidden'}" onclick="clearInlineImage(this)">Xóa ảnh</button>
+            </div>
+          </div>
+          <input type="hidden" class="img-base64 gallery-src" value="${item.src || ''}" />
+        </div>
+      </div>`).join('');
+    bindRemove('gallery-item', renderGalleryEditor, collectGallery);
+  }
+
+  function collectGallery() {
+    return [...document.querySelectorAll('#gallery-editor .card-editor')].map(el => ({
+      caption: el.querySelector('.gallery-caption').value,
+      alt:     el.querySelector('.gallery-alt').value,
+      src:     el.querySelector('.gallery-src').value || '',
+    }));
+  }
+
+  document.getElementById('add-gallery-item').addEventListener('click', () => {
+    const list = collectGallery();
+    list.push({ src: '', caption: 'Ảnh mới', alt: '' });
+    renderGalleryEditor(list);
+  });
+
   // ── Remove helper ──
   function bindRemove(type, renderFn, collectFn) {
     document.querySelectorAll(`[data-remove="${type}"]`).forEach(btn => {
@@ -575,6 +631,8 @@
       payload = { testimonials: collectTestimonials() };
     } else if (section === 'partners') {
       payload = { partners: document.getElementById('partners_text').value.split('\n').map(s => s.trim()).filter(Boolean) };
+    } else if (section === 'gallery') {
+      payload = { gallery: collectGallery() };
     }
 
     const r = await fetch(`${API}/api/content`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(payload) });

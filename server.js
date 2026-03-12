@@ -8,7 +8,7 @@ const path       = require('path');
 
 const app        = express();
 const PORT       = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'niji-secret-change-me';
+const JWT_SECRET = process.env.JWT_SECRET || 'tec-secret-change-me';
 
 // Vercel: dùng /tmp (writable), local: dùng data/
 const DATA_DIR = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
@@ -28,12 +28,12 @@ function getAdminPassword() { return readConfig().adminPassword; }
 // ─── Default content ──────────────────────────────────────────────────────────
 const DEFAULT_CONTENT = {
   hero_headline:   'Nói Nhiều Hơn, Tiến Bộ Nhanh Hơn',
-  hero_subtext:    'Niji English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò. Bạn sẽ nói tiếng Anh 70–80% thời gian mỗi buổi học.',
+  hero_subtext:    'TEC English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò. Bạn sẽ nói tiếng Anh 70–80% thời gian mỗi buổi học.',
   hero_badge:      'Học 1 kèm 1 · Cá nhân hóa · Linh hoạt',
   about_title:     'Học tiếng Anh 1 kèm 1 – Nói nhiều hơn, tiến bộ nhanh hơn',
-  about_desc:      'Niji English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò, nơi mỗi học viên có lộ trình học cá nhân hóa và được luyện nói tiếng Anh nhiều nhất trong mỗi buổi học. Chúng tôi tin rằng cách tốt nhất để giỏi tiếng Anh là nói thật nhiều. Vì vậy, học viên sẽ dành 70–80% thời gian để nói tiếng Anh.',
+  about_desc:      'TEC English là nền tảng học tiếng Anh giao tiếp 1 thầy – 1 trò, nơi mỗi học viên có lộ trình học cá nhân hóa và được luyện nói tiếng Anh nhiều nhất trong mỗi buổi học. Chúng tôi tin rằng cách tốt nhất để giỏi tiếng Anh là nói thật nhiều. Vì vậy, học viên sẽ dành 70–80% thời gian để nói tiếng Anh.',
   contact_phone:   '+84 123 456 789',
-  contact_email:   'hello@niji.edu.vn',
+  contact_email:   'hello@tec.edu.vn',
   contact_address: 'TP. Hồ Chí Minh, Việt Nam',
   stats: [
     { value: 1200, suffix: '+',       label: 'Học viên'  },
@@ -55,11 +55,19 @@ const DEFAULT_CONTENT = {
     { icon: 'fa-bolt',             color: 'green', title: 'Luyện phản xạ giao tiếp',                    desc: 'Tập trả lời nhanh, tự nhiên. Xây dựng phản xạ tiếng Anh thực sự thay vì dịch từ tiếng Việt.' },
   ],
   testimonials: [
-    { name: 'Nguyễn Thị Lan', title: 'Marketing Manager · FPT Software',      quote: 'Trước đây em cứ nghĩ tiếng Anh của mình quá tệ để học lại. Nhưng sau 2 tháng học 1 kèm 1 tại Niji English, em đã có thể họp bằng tiếng Anh với khách hàng mà không run nữa.', level: 'B2 đạt được', avatar: 'Nguyen+Thi+Lan'  },
-    { name: 'Trần Văn Hiếu',  title: 'Software Engineer · Startup Hàn Quốc', quote: 'Mình từng sợ nói tiếng Anh dù học 10 năm. Sau 3 tháng với Niji English, mình đã phỏng vấn thành công vào công ty Hàn Quốc. Phương pháp Practice First thực sự hiệu quả!', level: 'C1 đạt được', avatar: 'Tran+Van+Hieu'   },
-    { name: 'Lê Thu Hương',   title: 'B2B Sales Manager · Lazada Vietnam',    quote: 'Mình làm sale B2B, cần tiếng Anh để gặp khách nước ngoài. Học tại Niji English được luyện đúng những gì mình cần, giáo viên sửa từng câu nói trong tình huống thực tế.', level: 'B1 → B2',    avatar: 'Le+Thu+Huong'    },
+    { name: 'Nguyễn Thị Lan', title: 'Marketing Manager · FPT Software',      quote: 'Trước đây em cứ nghĩ tiếng Anh của mình quá tệ để học lại. Nhưng sau 2 tháng học 1 kèm 1 tại TEC English, em đã có thể họp bằng tiếng Anh với khách hàng mà không run nữa.', level: 'B2 đạt được', avatar: 'Nguyen+Thi+Lan'  },
+    { name: 'Trần Văn Hiếu',  title: 'Software Engineer · Startup Hàn Quốc', quote: 'Mình từng sợ nói tiếng Anh dù học 10 năm. Sau 3 tháng với TEC English, mình đã phỏng vấn thành công vào công ty Hàn Quốc. Phương pháp Practice First thực sự hiệu quả!', level: 'C1 đạt được', avatar: 'Tran+Van+Hieu'   },
+    { name: 'Lê Thu Hương',   title: 'B2B Sales Manager · Lazada Vietnam',    quote: 'Mình làm sale B2B, cần tiếng Anh để gặp khách nước ngoài. Học tại TEC English được luyện đúng những gì mình cần, giáo viên sửa từng câu nói trong tình huống thực tế.', level: 'B1 → B2',    avatar: 'Le+Thu+Huong'    },
   ],
   partners: ['Microsoft','Google','VNG Corporation','Lazada','Grab','FPT Software','Masan Group','Vingroup'],
+  gallery: [
+    { src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80', caption: 'Buổi học 1 kèm 1 online',        alt: 'Lớp học online' },
+    { src: 'https://images.unsplash.com/photo-1543269664-76bc3997d9ea?w=600&q=80', caption: 'Workshop Speaking',               alt: 'Workshop tiếng Anh' },
+    { src: 'https://images.unsplash.com/photo-1560472355-536de3962603?w=600&q=80', caption: 'English Club hằng tuần',          alt: 'English Club' },
+    { src: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80', caption: 'Học trực tuyến mọi lúc',          alt: 'Học online' },
+    { src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80', caption: 'Đào tạo tiếng Anh doanh nghiệp', alt: 'Business English' },
+    { src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80', caption: 'Lễ tốt nghiệp khóa học',          alt: 'Graduation' },
+  ],
 };
 
 // ─── JSON file helpers ────────────────────────────────────────────────────────
@@ -203,9 +211,9 @@ app.post('/api/contact', async (req, res) => {
     // Gửi email nếu đã cấu hình SMTP
     if (process.env.SMTP_USER && process.env.SMTP_PASS) {
       transporter.sendMail({
-        from: `"Niji English" <${process.env.SMTP_USER}>`,
+        from: `"TEC English" <${process.env.SMTP_USER}>`,
         to:   process.env.CONTACT_RECEIVER || process.env.SMTP_USER,
-        subject: `[Niji English] Liên hệ mới từ ${name}`,
+        subject: `[TEC English] Liên hệ mới từ ${name}`,
         html: `<h2>Liên hệ mới</h2><table cellpadding="8">
           <tr><td><b>Họ tên:</b></td><td>${name}</td></tr>
           <tr><td><b>Email:</b></td><td>${email}</td></tr>
@@ -233,4 +241,4 @@ app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'adm
 // ─── Fallback SPA ─────────────────────────────────────────────────────────────
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-app.listen(PORT, () => console.log(`Niji English → http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`TEC English → http://localhost:${PORT}`));
