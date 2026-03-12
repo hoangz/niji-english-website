@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEC English – Admin</title>
+  <title>DayOne English – Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { theme: { extend: { colors: { primary: '#066aab', accent: '#00764b', dark: '#0a1628' }, fontFamily: { sans: ['DM Sans','sans-serif'], display: ['Plus Jakarta Sans','sans-serif'] } } } };</script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#5B8A42', accent: '#3E6E2E', dark: '#1C2E14' }, fontFamily: { sans: ['DM Sans','sans-serif'], display: ['Plus Jakarta Sans','sans-serif'] } } } };</script>
   <style>
     body { font-family: 'DM Sans', sans-serif; }
     h1,h2,h3,h4,.logo { font-family: 'Plus Jakarta Sans', sans-serif; }
     .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; font-size:14px; font-weight:500; color:#64748b; transition:all .2s; cursor:pointer; }
-    .sidebar-link:hover, .sidebar-link.active { background:#eff6ff; color:#066aab; }
+    .sidebar-link:hover, .sidebar-link.active { background:#edf5e6; color:#5B8A42; }
     .sidebar-link.active { font-weight:600; }
     .panel { display:none; }
     .panel.active { display:block; }
     #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px); padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; color:#fff; z-index:9999; transition:transform .3s, opacity .3s; opacity:0; }
     #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-    #toast.success { background:#00764b; }
+    #toast.success { background:#3E6E2E; }
     #toast.error   { background:#dc2626; }
     .field-label { display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:6px; }
     .field-input { width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; color:#1e293b; outline:none; transition:border .2s; background:#fff; font-family:'DM Sans',sans-serif; }
-    .field-input:focus { border-color:#066aab; box-shadow:0 0 0 3px rgba(6,106,171,.1); }
+    .field-input:focus { border-color:#5B8A42; box-shadow:0 0 0 3px rgba(91,138,66,.1); }
     textarea.field-input { resize:vertical; min-height:80px; }
-    .save-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:#066aab; color:#fff; font-weight:700; font-size:14px; border:none; cursor:pointer; transition:opacity .2s,transform .2s; }
+    .save-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:#5B8A42; color:#fff; font-weight:700; font-size:14px; border:none; cursor:pointer; transition:opacity .2s,transform .2s; }
     .save-btn:hover { opacity:.9; transform:scale(1.02); }
     .save-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
     .card-editor { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; }
@@ -41,9 +41,9 @@
 <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
     <div class="flex items-center gap-3 mb-8">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xl logo" style="background:#066aab">T</div>
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xl logo" style="background:#5B8A42">D</div>
       <div>
-        <div class="font-bold text-slate-900 text-lg logo">TEC English</div>
+        <div class="font-bold text-slate-900 text-lg logo">DayOne English</div>
         <div class="text-slate-400 text-xs">Quản trị nội dung</div>
       </div>
     </div>
@@ -68,9 +68,9 @@
   <aside class="w-64 bg-white border-r border-slate-200 flex flex-col fixed top-0 left-0 bottom-0 z-40">
     <div class="p-5 border-b border-slate-100">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black logo" style="background:#066aab">T</div>
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black logo" style="background:#5B8A42">D</div>
         <div>
-          <div class="font-bold text-slate-900 text-sm logo">TEC English</div>
+          <div class="font-bold text-slate-900 text-sm logo">DayOne English</div>
           <div class="text-slate-400 text-xs">Admin Panel</div>
         </div>
       </div>
@@ -183,7 +183,7 @@
 
     <!-- ── FEATURES ── -->
     <div id="panel-features" class="panel">
-      <h2 class="text-2xl font-bold text-slate-900 mb-6">Lý do chọn TEC English</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Lý do chọn DayOne English</h2>
       <div class="bg-white rounded-2xl p-6 shadow-sm">
         <div id="features-editor" class="space-y-4 mb-5"></div>
         <div class="flex gap-3 flex-wrap">
